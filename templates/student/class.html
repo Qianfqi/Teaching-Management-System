@@ -1,0 +1,89 @@
+{% extends 'student/base_student.html' %}
+{% block content %}
+
+    <script type="text/javascript">
+        (function () {
+            const amis = amisRequire("amis/embed");
+            amis.embed("#main", {
+                type: "page",
+                title: "班级{{session['cid']}}",
+                // title: "基础表单",
+                // subTitle: "展示一些常规的表单，包括验证、提示等等",
+                body: [{
+                    "type": "service",
+                    "api": "/student/get_student_class_info",
+                    "body": [
+                        {
+                            "type": "table",
+                            "source": "$rows",
+                            "columns": [
+                                {
+                                    "name": "student_id",
+                                    "label": "学号",
+                                },
+                                {
+                                    "name": "name",
+                                    "label": "姓名"
+                                },
+                                {
+                                    "type": "operation",
+                                    "label": "操作",
+                                    "buttons": [
+                                        {
+                                            "label": "详情",
+                                            "type": "button",
+                                            "actionType": "dialog",
+                                            "dialog": {
+                                                "actions": [
+                                                    {
+                                                        "type": "button",
+                                                        "actionType": "confirm",
+                                                        "label": "确认",
+                                                        "primary": true
+                                                    }
+                                                ],
+                                                "title": "$name",
+                                                "body": {
+                                                    "type": "form",
+                                                    "controls": [
+                                                        {
+                                                            "label": "学号",
+                                                            "name": "student_id",
+                                                            "type": "static"
+                                                        },
+                                                        {
+                                                            "name": "name",
+                                                            "label": "姓名",
+                                                            "type": "static"
+                                                        },
+                                                        {
+                                                            "name": "sex",
+                                                            "label": "性别",
+                                                            "type": "static"
+                                                        },
+                                                        {
+                                                            "name": "tel",
+                                                            "label": "电话号码",
+                                                            "type": "static"
+                                                        },
+
+                                                        {
+                                                            "name": "detail",
+                                                            "label": "个人简介",
+                                                            "type": "static"
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }]
+            });
+        })()
+    </script>
+
+{% endblock content %}

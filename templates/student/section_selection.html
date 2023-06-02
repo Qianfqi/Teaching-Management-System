@@ -1,0 +1,87 @@
+{% extends 'student/base_student.html' %}
+{% block content %}
+    <script type="text/javascript">
+    (function () {
+      var amis = amisRequire("amis/embed");
+      // 用 amis 的 sdk 渲染内容区
+      amis.embed("#main", {
+          type: "page",
+          title: "选课界面",
+          body:[{
+              type: "page",
+              body:{
+                  type: "crud",
+                  api: "/student/show_section_selection",
+                  columns:[
+                      {
+                "name": "sec_id",
+                "label": "课程编号"
+              },
+              {
+                "name": "name",
+                "label": "课程名称"
+              },
+              {
+                "name": "semester",
+                "label": "学期"
+              },
+              {
+                "name": "year",
+                "label": "年份"
+              },
+              {
+                "name": "teacher_name",
+                "label": "授课教师"
+              },
+
+              {
+                "name": "classroom_name",
+                "label": "上课地点"
+              },
+              {
+                "name": "day_of_week",
+                "label": "上课日"
+              },
+              {
+                "name": "start_time",
+                "label": "开始时间"
+              },
+              {
+                "name": "end_time",
+                "label": "结束时间"
+              },
+              {
+                "name": "start_week",
+                "label": "开始周"
+              },
+              {
+                "name": "end_week",
+                "label": "结束周"
+              },
+              {
+                "name": "department",
+                "label": "开课院系"
+},
+                      {
+                          "type": "operation",
+                          "label": "选课",
+                          buttons: [
+                              {
+                                  "tooltip": "选课",
+                                  "type": "button",
+                                  "icon": "fa fa-pencil text-info",
+                                  "actionType": "ajax",
+                                  "confirmText": "确认要选课？",
+                                  "api": "/student/section_selection_operation"
+                              }
+                          ]
+                      }
+
+                  ]
+              }
+          }]
+          }
+      );
+    })();
+  </script>
+{% endblock %}

@@ -1,0 +1,159 @@
+{% extends 'admin/base_admin.html' %}
+{% block content %}
+    <script type="text/javascript">
+        (function () {
+
+            // 添加按钮
+            addjson = {
+                "label": "新增教室",
+                "type": "button",
+                "actionType": "dialog",
+                "dialog": {
+                    "title": "新增教室",
+                    "size": 'lg',
+                    "body": {
+                        "type": "form",
+                        "api": "post:/admin/add_a_classroom",
+                        "controls": [
+                            {
+                                "type": "text",
+                                "name": "classroom_id",
+                                label: "教室号",
+                                required: 1
+                            },
+                            {
+                                "type": "text",
+                                "name": "name",
+                                "label": "教室名",
+                                required: 1,
+
+                            },
+                            {
+                                "label": "教学楼",
+                                "type": "select",
+                                "name": "building_id",
+                                "source": "${building_options}",
+                                required: 1
+                            }
+                        ]
+                    }
+                }
+            }
+            // 顶部搜索
+            topsertch = {
+                "title": "搜索",
+                "controls": [
+                    {
+                        "type": "text",
+                        "name": "name",
+                        "placeholder": "教室名"
+                    },
+                    {
+                        "placeholder": "教学楼",
+                        "type": "select",
+                        "name": "building_id",
+                        "source": "${building_options}",
+                    }
+                ]
+            }
+
+
+            var amis = amisRequire("amis/embed");
+            // 用 amis 的 sdk 渲染内容区
+            amis.embed("#main", {
+                type: "page",
+                // subTitle: "展示一些常规的表单，包括验证、提示等等",
+                body: [
+                    {
+                        "type": "page",
+                        "body": {
+                            "type": "crud",
+                            syncLocation: false,
+                            "api": "/admin/get_all_classroom",
+                            "name": "userList",
+                            "filterTogglable": true,
+                            "headerToolbar": [
+                                addjson,
+                                "filter-toggler",
+                            ],
+                            "footerToolbar": [
+                                "statistics",
+                                "switch-per-page",
+                                "pagination"
+                            ],
+                            "filter": topsertch,
+                            "columns": [
+                                {
+                                    "name": "classroom_id",
+                                    "label": "教室号"
+                                },
+                                {
+                                    "name": "name",
+                                    "label": "教室名"
+                                },
+                                {
+                                    "name": "building.name",
+                                    "label": "教学楼",
+                                },
+                                {
+                                    "type": "operation",
+                                    "label": "操作",
+                                    "buttons": [
+                                        {
+                                            "tooltip": "删除",
+                                            "type": "button",
+                                            "icon": "fa fa-times text-danger",
+                                            "actionType": "ajax",
+                                            "confirmText": "确认要删除？",
+                                            "api": "delete:/admin/delete_a_classroom/${classroom_id}"
+                                        },
+                                        {
+                                            "tooltip": "修改",
+                                            "icon": "fa fa-pencil text-info",
+                                            "type": "button",
+                                            "actionType": "dialog",
+                                            "dialog": {
+                                                "title": "修改教室",
+                                                "size": 'lg',
+                                                "body": {
+                                                    "type": "form",
+                                                    "data": {},
+                                                    "api": "/admin/change_a_classroom",
+                                                    "controls": [
+                                                        {
+                                                            "type": "text",
+                                                            "name": "classroom_id",
+                                                            label: " 班级号",
+                                                            required: 1,
+                                                            disabled: true
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "name",
+                                                            "label": "班级名",
+                                                            required: 1,
+                                                        },
+                                                        {
+                                                            "label": "教学楼",
+                                                            "type": "select",
+                                                            "name": "building_id",
+                                                            "source": "${building_options}",
+                                                            required: 1,
+                                                            disabled: true
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+
+
+                ]
+            });
+        })();
+    </script>
+{% endblock content %}

@@ -1,0 +1,88 @@
+{% extends 'admin/base_admin.html' %}
+{% block content %}
+    <script type="text/javascript">
+        (function () {
+            var amis = amisRequire("amis/embed");
+            // 用 amis 的 sdk 渲染内容区
+            amis.embed("#main", {
+                type: "page",
+                // subTitle: "展示一些常规的表单，包括验证、提示等等",
+                body: [
+                    {
+                        "type": "page",
+                        "body": {
+                            "type": "form",
+                            "initApi": "/admin/get_me/{{ session['uid'] }}",
+                            api: "change_me",
+                            "title": "修改用户信息",
+                            "controls": [
+                                {
+                                    "type": "text",
+                                    "name": "admin_id",
+                                    "label": "管理员号",
+                                    disabled: true
+                                },
+                                {
+                                    "type": "text",
+                                    "name": "account",
+                                    "label": "账号",
+                                    disabled: true
+                                },
+                                {
+                                    "type": "text",
+                                    "name": "name",
+                                    "label": "姓名",
+                                    required: 1
+                                },
+                                {
+                                    "type": "text",
+                                    "name": "password",
+                                    "label": "密码",
+                                    required: 1,
+                                    validations: {
+                                        minLength: 1,
+                                    },
+                                },
+                                {
+                                    "type": "text",
+                                    "name": "id_card",
+                                    "label": "身份证",
+                                    required: 1,
+                                    validations: {
+                                        isLength: 18,
+                                    },
+                                },
+                                {
+                                    "type": "text",
+                                    "name": "tel",
+                                    "label": "电话",
+                                    "validations": {
+                                        "isNumeric": true
+                                    }
+                                },
+                                {
+                                    "label": "性别",
+                                    "type": "select",
+                                    "name": "sex",
+                                    "options": [
+                                        {
+                                            "label": "Male",
+                                            "value": "Male"
+                                        },
+                                        {
+                                            "label": "Female",
+                                            "value": "Female"
+                                        }
+                                    ]
+                                }
+
+                            ]
+                        }
+                    }
+
+
+                ]
+            });
+        })();
+    </script>
+{% endblock content %}

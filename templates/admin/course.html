@@ -1,0 +1,206 @@
+{% extends 'admin/base_admin.html' %}
+{% block content %}
+    <script type="text/javascript">
+        (function () {
+
+            // 添加按钮
+            addjson = {
+                "label": "新增课程",
+                "type": "button",
+                "actionType": "dialog",
+                "dialog": {
+                    "title": "新增课程",
+                    "size": 'lg',
+                    "body": {
+                        "type": "form",
+                        "api": "post:/admin/add_a_course",
+                        "controls": [
+                            {
+                                "type": "text",
+                                "name": "course_id",
+                                label: "课程号",
+                                required: 1,
+                                "validations": {
+                                    "isNumeric": true
+                                }
+                            },
+                            {
+                                "type": "text",
+                                "name": "name",
+                                "label": "课程名",
+                                required: 1,
+                            },
+                            {
+                                "type": "text",
+                                "name": "total_time",
+                                "label": "学时",
+                                required: 1,
+                                "validations": {
+                                    "isNumeric": true
+                                }
+                            },
+                            {
+                                "type": "text",
+                                "name": "grade",
+                                "label": "年级",
+                                required: 1,
+                                "validations": {
+                                    "isNumeric": true
+                                }
+                            },
+                            {
+                                "label": "学院",
+                                "type": "select",
+                                "name": "department_id",
+                                "source": "${department_options}",
+                                required: 1
+                            }
+                        ]
+                    }
+                }
+            }
+            // 顶部搜索
+            topsertch = {
+                "title": "搜索",
+                "controls": [
+                    {
+                        "type": "text",
+                        "name": "name",
+                        "placeholder": "课程名"
+                    },
+                    {
+                        "placeholder": "学院",
+                        "type": "select",
+                        "name": "department_id",
+                        "source": "${department_options}",
+                    }
+                ]
+            }
+
+
+            var amis = amisRequire("amis/embed");
+            // 用 amis 的 sdk 渲染内容区
+            amis.embed("#main", {
+                type: "page",
+                // subTitle: "展示一些常规的表单，包括验证、提示等等",
+                body: [
+                    {
+                        "type": "page",
+                        "body": {
+                            "type": "crud",
+                            syncLocation: false,
+                            "api": "/admin/get_all_course",
+                            "filterTogglable": true,
+                            "headerToolbar": [
+                                addjson,
+                                "filter-toggler",
+                            ],
+                            "footerToolbar": [
+                                "statistics",
+                                "switch-per-page",
+                                "pagination"
+                            ],
+                            "filter": topsertch,
+                            "columns": [
+                                {
+                                    "name": "course_id",
+                                    "label": "教室号"
+                                },
+                                {
+                                    "name": "name",
+                                    "label": "教室名"
+                                },
+                                {
+                                    "name": "department.name",
+                                    "label": "学院",
+                                },
+                                {
+                                    "name": "grade",
+                                    "label": "年级",
+                                },
+                                {
+                                    "name": "total_time",
+                                    "label": "学时",
+                                },
+                                {
+                                    "type": "operation",
+                                    "label": "操作",
+                                    "buttons": [
+                                        {
+                                            "tooltip": "删除",
+                                            "type": "button",
+                                            "icon": "fa fa-times text-danger",
+                                            "actionType": "ajax",
+                                            "confirmText": "确认要删除？",
+                                            "api": "delete:/admin/delete_a_course/${course_id}"
+                                        },
+                                        {
+                                            "tooltip": "修改",
+                                            "icon": "fa fa-pencil text-info",
+                                            "type": "button",
+                                            "actionType": "dialog",
+                                            "dialog": {
+                                                "title": "修改教室",
+                                                "size": 'lg',
+                                                "body": {
+                                                    "type": "form",
+                                                    "data": {},
+                                                    "api": "/admin/change_a_course",
+                                                    "controls": [
+                                                        {
+                                                            "type": "text",
+                                                            "name": "course_id",
+                                                            label: "课程号",
+                                                            required: 1,
+                                                            "validations": {
+                                                                "isNumeric": true
+                                                            },
+                                                            disabled: true
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "name",
+                                                            "label": "课程名",
+                                                            required: 1,
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "total_time",
+                                                            "label": "学时",
+                                                            required: 1,
+                                                            "validations": {
+                                                                "isNumeric": true
+                                                            }
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "grade",
+                                                            "label": "年级",
+                                                            required: 1,
+                                                            "validations": {
+                                                                "isNumeric": true
+                                                            }
+                                                        },
+                                                        {
+                                                            "label": "学院",
+                                                            "type": "select",
+                                                            "name": "department_id",
+                                                            "source": "${department_options}",
+                                                            required: 1
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+
+
+                ]
+            });
+        })();
+    </script>
+{% endblock content %}

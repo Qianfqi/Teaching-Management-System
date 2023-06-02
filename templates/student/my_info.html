@@ -1,0 +1,93 @@
+{% extends 'student/base_student.html' %}
+{% block content %}
+    <script type="text/javascript">
+        (function () {
+            var amis = amisRequire("amis/embed");
+            // 用 amis 的 sdk 渲染内容区
+            amis.embed("#main", {
+                type: "page",
+                title: "修改信息",
+                // subTitle: "展示一些常规的表单，包括验证、提示等等",
+                body: [
+                    {
+                        "type": "page",
+                        "body": {
+                            "type": "form",
+                             "initApi": "/student/get_me/{{ session['uid'] }}",
+                            api: "my_info",
+                            "title": "我的信息",
+                            "controls": [
+                                {
+                                    "type": "text",
+                                    "name": "student_id",
+                                    "label": "学号",
+                                    disabled: true
+                                },
+                                {
+                                    "type": "text",
+                                    "name": "account",
+                                    "label": "账号",
+                                    disabled: true
+                                },
+                                {
+                                    "type": "text",
+                                    "name": "class_id",
+                                    "label": "班级",
+                                    disabled: true,
+                                },
+                                {
+                                    "type": "text",
+                                    "name": "name",
+                                    "label": "姓名",
+                                    required: 1
+                                },
+
+                                {
+                                    "type": "text",
+                                    "name": "password",
+                                    "label": "密码",
+                                    required: 1,
+                                    validations: {
+                                        minLength: 1,
+                                    },
+                                },
+                                {
+                                    "type": "text",
+                                    "name": "id_card",
+                                    "label": "身份证",
+                                    required: 1,
+                                    validations: {
+                                        isLength: 18,
+                                    },
+                                },
+                                {
+                                    "type": "text",
+                                    "name": "tel",
+                                    "label": "电话",
+                                    "validations": {
+                                        "isNumeric": true
+                                    }
+                                },
+                                {
+                                    "type": "text",
+                                    "label": "性别",
+                                    "name": "sex",
+
+                                },
+                                {
+                                    "type": "text",
+                                    "name": "detail",
+                                    "label": "个人详情",
+
+                                },
+
+                            ]
+                        }
+                    }
+
+
+                ]
+            });
+        })();
+    </script>
+{% endblock content %}

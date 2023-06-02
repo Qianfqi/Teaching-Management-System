@@ -1,0 +1,69 @@
+{% extends 'student/base_student.html' %}
+{% block content %}
+  <script type="text/javascript">
+    (function () {
+      topsearch = {
+                "title": "搜索",
+                "controls": [
+                    {
+                        "type": "text",
+                        "name": "semester",
+                        "placeholder": "学期"
+                    },
+                    {
+                        "type": "text",
+                        "name": "year",
+                        "placeholder": "学年"
+                    }
+                ]
+            }
+      var amis = amisRequire("amis/embed");
+      // 用 amis 的 sdk 渲染内容区
+
+      amis.embed("#main", {
+        type: "page",
+        "title": "我的成绩",
+        body: [
+          {
+            "type": "page",
+            "body": {
+              "type": "crud",
+              syncLocation: false,
+              "api": "/student/get_my_score",
+              "name": "userlist",
+              "filterTogglable": false,
+              "headerToolbar": [
+                "filter-toggler",
+              ],
+              "filter": topsearch,
+              "columns": [
+                {
+                  "name": "sec_id",
+                  "label": "课程编号"
+                },
+                {
+                  "name": "name",
+                  "label": "课程名称"
+                },
+                {
+                  "name": "semester",
+                  "label": "学期"
+                },
+                {
+                  "name": "year",
+                  "label": "年份"
+                },
+                {
+                  "name": "score",
+                  "label": "成绩"
+                },
+              ]
+
+            }
+            }
+          ]
+
+});
+})();
+</script>
+{% endblock %}

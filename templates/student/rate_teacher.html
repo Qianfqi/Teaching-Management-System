@@ -1,0 +1,113 @@
+{% extends 'student/base_student.html' %}
+
+{% block content %}
+<div class="container">
+  <style>
+    h1.text-center {
+      margin-top: 0;
+    }
+  </style>
+
+  <script type="text/javascript">
+    (function () {
+      var amis = amisRequire("amis/embed");
+      // 用 amis 的 sdk 渲染内容区
+      amis.embed("#main", {
+        type: "page",
+        "title": "学生评分",
+        body: [
+          {
+            "type": "page",
+            "body": {
+              "type": "crud",
+              "api": "/student/rate_teacher_show_course",
+              "columns": [
+                {
+                  "name": "sec_id",
+                  "label": "课程编号"
+                },
+                {
+                  "name": "name",
+                  "label": "课程名称"
+                },
+                {
+                  "name": "semester",
+                  "label": "学期"
+                },
+                {
+                  "name": "year",
+                  "label": "年份"
+                },
+                {
+                  "name": "teacher_name",
+                  "label": "授课教师"
+                },
+                {
+                  "name": "score",
+                  "label": "考试分数"
+                },
+                {
+                                    "type": "operation",
+                                    "label": "操作",
+                                    "buttons": [
+                                        {
+                                            "tooltip": "评分",
+                                            "type": "button",
+                                            "icon": "fa fa-pencil text-info",
+                                            "actionType": "dialog",
+                                            "dialog":{
+                                                "title": "评分",
+                                                "size": 'lg',
+                                                "body": {
+                                                    "type": "form",
+                                                    "data": {},
+                                                    "api": "/student/rating_teacher",
+                                                    "controls": [
+                                                        {
+                                                          "type": "number",
+                                                          "label": "课程Sec ID",
+                                                          "name": "sec_id",
+                                                          "placeholder": "请输入您要评分的课程的Sec ID",
+                                                          "required": true
+                                                        },
+                                                        {
+                                                          "type": "number",
+                                                          "label": "评分",
+                                                          "name": "scores",
+                                                          "min": 0,
+                                                          "max": 100,
+                                                          "step": 1,
+                                                          "placeholder": "请输入评分",
+                                                          "required": true
+                                                        },
+                                                        {
+                                                          "type": "text",
+                                                          "label": "评价",
+                                                          "name": "comment",
+                                                          "placeholder": "请输入您的评价",
+                                                          "required": false,
+                                                        },
+                                                        {
+                                                          "type": "button",
+                                                          "label": "提交评分",
+                                                          "htmlId": "submit-btn",
+                                                          "level": "primary",
+                                                          "actionType": "submit"
+                                                        }
+                                                      ]
+                                                }
+                                            }
+
+                                        }
+                                        ]
+                }
+            ]
+            }
+          }
+        ]
+      }
+      );
+    })();
+  </script>
+</div>
+{% endblock %}

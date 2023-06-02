@@ -1,0 +1,262 @@
+{% extends 'teacher/base_teacher.html' %}
+{% block content %}
+    <script type="text/javascript">
+        (function () {
+
+            // 添加按钮
+            addjson = {
+                "label": "新增教师",
+                "type": "button",
+                "actionType": "dialog",
+                "dialog": {
+                    "title": "新增教师",
+                    "size": 'lg',
+                    "body": {
+                        "type": "form",
+                        "api": "post:/admin/add_a_teacher",
+                        "reload": "window",
+                        "controls": [
+                            {
+                                "type": "text",
+                                "name": "teacher_id",
+                                label: "教师号",
+                                required: 1
+                            },
+                            {
+                                "type": "text",
+                                "name": "account",
+                                "label": "账号",
+                                required: 1,
+                                validations: {
+                                    isAlphanumeric: 1,
+                                    minLength: 5,
+                                    maxLength: 20,
+                                },
+                            },
+                            {
+                                "type": "text",
+                                "name": "password",
+                                "label": "密码",
+                                required: 1,
+                                validations: {
+                                    minLength: 1,
+                                },
+                            },
+                            {
+                                "type": "text",
+                                "name": "name",
+                                "label": "姓名",
+                                required: 1,
+
+                            },
+                            {
+                                "type": "text",
+                                "name": "id_card",
+                                "label": "身份证",
+                                required: 1,
+                                validations: {
+                                    isLength: 18,
+                                },
+                            },
+                            {
+                                "label": "学院",
+                                "type": "select",
+                                "name": "department_id",
+                                "source": "${department_options}",
+                                required: 1
+                            },
+                            {
+                                "type": "date",
+                                "name": "in_time",
+                                "label": "入职时间",
+                                required: 1
+                            },
+                            {
+                                "type": "text",
+                                "name": "tel",
+                                "label": "电话",
+                                "validations": {
+                                    "isNumeric": true
+                                }
+                            },
+                            {
+                                "type": "text",
+                                "name": "sign",
+                                "label": "简介",
+                            },
+                            {
+                                "label": "性别",
+                                "type": "select",
+                                "name": "sex",
+                                "options": [
+                                    {
+                                        "label": "Male",
+                                        "value": "Male"
+                                    },
+                                    {
+                                        "label": "Female",
+                                        "value": "Female"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+            // 顶部搜索
+            topsertch = {
+                "title": "搜索",
+                "controls": [
+                    {
+                        "type": "text",
+                        "name": "s_id",
+                        "placeholder": "开课号"
+                    }
+                ]
+            }
+
+
+            var amis = amisRequire("amis/embed");
+            // 用 amis 的 sdk 渲染内容区
+            amis.embed("#main", {
+                type: "page",
+                title: "用户列表",
+                // subTitle: "展示一些常规的表单，包括验证、提示等等",
+                body: [
+                    {
+                        "type": "page",
+                        "body": {
+                            "type": "crud",
+                            syncLocation: false,
+                            "api": "/teacher/get_select_student",
+                            "name": "userList",
+                            "filterTogglable": true,
+                            "headerToolbar": [
+                                addjson,
+                                "filter-toggler",
+                            ],
+                            "footerToolbar": [
+                                "statistics",
+                                "switch-per-page",
+                                "pagination"
+                            ],
+                            "filter": topsertch,
+                            "columns": [
+                                 {
+                                    "name": "sec_id",
+                                    "label": "开课号"
+                                },
+                                {
+                                    "name": "course_name",
+                                    "label": "课程名"
+                                },
+                                {
+                                    "name": "student_id",
+                                    "label": "学号"
+                                },
+                                 {
+                                    "name": "name",
+                                    "label": "姓名"
+                                },
+                                {
+                                    "name": "sex",
+                                    "label": "性别"
+                                },
+                                {
+                                    "name": "score",
+                                    "label": "分数"
+                                },
+                                {
+                                    "name": "tag",
+                                    "label": "成绩状态"
+                                },
+                                {
+                                    "name": "year",
+                                    "label": "年份"
+                                },
+                                {
+                                    "type": "operation",
+                                    "label": "操作",
+                                    "buttons": [
+                                        {
+                                            "tooltip": "修改",
+                                            "icon": "fa fa-pencil text-info",
+                                            "type": "button",
+                                            "actionType": "dialog",
+                                            "dialog": {
+                                                "title": "修改成绩",
+                                                "size": 'lg',
+                                                "body": {
+                                                    "type": "form",
+                                                    "data": {},
+                                                    "api": "/teacher/update_student_score",
+                                                    "reload": "window",
+                                                    "controls": [
+                                                        {
+                                                            "type": "text",
+                                                            "name": "sec_id",
+                                                            label: "选课号",
+                                                            disabled: true
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "student_id",
+                                                            "label": "学号",
+                                                            disabled: true
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "course_name",
+                                                            "label": "课程名",
+                                                            disabled: true
+                                                        },
+                                                         {
+                                                            "type": "text",
+                                                            "name": "name",
+                                                            "label": "姓名",
+                                                            disabled: true
+                                                        },
+                                                         {
+                                                            "type": "text",
+                                                            "name": "sex",
+                                                            "label": "性别",
+                                                            disabled: true
+                                                        },
+
+                                                        {
+                                                            "type": "text",
+                                                            "name": "score",
+                                                            "label": "分数",
+                                                            required: 1,
+
+                                                        },
+                                                         {
+                                                            "type": "text",
+                                                            "name": "tag",
+                                                            "label": "成绩状态",
+                                                             disabled: true
+
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "year",
+                                                            "label": "年份",
+                                                             disabled: true
+
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+
+
+                ]
+            });
+        })();
+    </script>
+{% endblock content %}

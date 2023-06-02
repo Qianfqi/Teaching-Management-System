@@ -1,0 +1,295 @@
+{% extends 'admin/base_admin.html' %}
+{% block content %}
+    <script type="text/javascript">
+        (function () {
+
+            // 添加按钮
+            addjson = {
+                "label": "新增开课",
+                "type": "button",
+                "actionType": "dialog",
+                "dialog": {
+                    "title": "新增开课",
+                    "size": 'lg',
+                    "body": {
+                        "type": "form",
+                        "api": "post:/admin/add_a_sec_course",
+                        "controls": [
+                            {
+                                "type": "text",
+                                "name": "sec_id",
+                                label: "开课号",
+                                required: 1,
+                                "validations": {
+                                    "isNumeric": true
+                                }
+                            },
+                            {
+                                "label": "学期",
+                                "type": "select",
+                                "name": "semester",
+                                required: 1,
+                                "options": [
+                                    {
+                                        "label": "Spring",
+                                        "value": "Spring"
+                                    },
+                                    {
+                                        "label": "Summer",
+                                        "value": "Summer"
+                                    },
+                                    {
+                                        "label": "Fall",
+                                        "value": "Fall"
+                                    },
+                                    {
+                                        "label": "Winter",
+                                        "value": "Winter"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "text",
+                                "name": "total_capacity",
+                                "label": "开课容量",
+                                required: 1,
+                                "validations": {
+                                    "isNumeric": true
+                                }
+                            },
+                            {
+                                "type": "text",
+                                "name": "year",
+                                "label": "学年",
+                                required: 1,
+                                "validations": {
+                                    "isNumeric": true
+                                }
+                            },
+                            {
+                                "label": "教室",
+                                "type": "select",
+                                "name": "classroom_id",
+                                "source": "${classroom_options}",
+                                required: 1
+                            },
+                            {
+                                "label": "课程",
+                                "type": "select",
+                                "name": "course_id",
+                                "source": "${course_options}",
+                                required: 1
+                            }
+                        ]
+                    }
+                }
+            }
+            // 顶部搜索
+            topsertch = {
+                "title": "搜索",
+                "controls": [
+                    {
+                        "placeholder": "教室",
+                        "type": "select",
+                        "name": "classroom_id",
+                        "source": "${classroom_options}",
+                    },
+                    {
+                        "placeholder": "课程",
+                        "type": "select",
+                        "name": "course_id",
+                        "source": "${course_options}",
+                    }
+                ]
+            }
+
+
+            var amis = amisRequire("amis/embed");
+            // 用 amis 的 sdk 渲染内容区
+            amis.embed("#main", {
+                type: "page",
+                // subTitle: "展示一些常规的表单，包括验证、提示等等",
+                body: [
+                    {
+                        "type": "page",
+                        "body": {
+                            "type": "crud",
+                            syncLocation: false,
+                            "api": "/admin/get_all_sec_course",
+                            "filterTogglable": true,
+                            "headerToolbar": [
+                                addjson,
+                                "filter-toggler",
+                            ],
+                            "footerToolbar": [
+                                "statistics",
+                                "switch-per-page",
+                                "pagination"
+                            ],
+                            "filter": topsertch,
+                            "columns": [
+                                {
+                                    "name": "sec_id",
+                                    "label": "开课号"
+                                },
+                                {
+                                    "name": "semester",
+                                    "label": "学期名"
+                                },
+                                {
+                                    "name": "total_capacity",
+                                    "label": "总容量",
+                                },
+                                {
+                                    "name": "current_capacity",
+                                    "label": "已经选容量",
+                                },
+                                {
+                                    "name": "name",
+                                    "label": "教室",
+                                },
+                                {
+                                    "name": "course.name",
+                                    "label": "课程",
+                                },
+                                {
+                                    "name": "year",
+                                    "label": "学年",
+                                },
+                                {
+                                    "name": "day_of_week",
+                                    "label": "星期",
+                                },
+                                {
+                                    "name": "start_week",
+                                    "label": "开始周",
+                                },
+                                {
+                                    "name": "end_week",
+                                    "label": "结束周",
+                                },
+                                {
+                                    "name": "start_time",
+                                    "label": "开始时间",
+                                },
+                                {
+                                    "name": "end_time",
+                                    "label": "结束时间",
+                                },
+                                {
+                                    "type": "operation",
+                                    "label": "操作",
+                                    "buttons": [
+                                        {
+                                            "tooltip": "删除",
+                                            "type": "button",
+                                            "icon": "fa fa-times text-danger",
+                                            "actionType": "ajax",
+                                            "confirmText": "确认要删除？",
+                                            "api": "delete:/admin/delete_a_sec_course/${sec_id}"
+                                        },
+                                        {
+                                            "tooltip": "修改",
+                                            "icon": "fa fa-pencil text-info",
+                                            "type": "button",
+                                            "actionType": "dialog",
+                                            "dialog": {
+                                                "title": "修改教室",
+                                                "size": 'lg',
+                                                "body": {
+                                                    "type": "form",
+                                                    "data": {},
+                                                    "api": "/admin/change_a_sec_course",
+                                                    "controls": [
+                                                        {
+                                                            "type": "text",
+                                                            "name": "sec_id",
+                                                            label: "开课号",
+                                                            required: 1,
+                                                            "validations": {
+                                                                "isNumeric": true
+                                                            },
+                                                            disabled: true
+                                                        },
+                                                        {
+                                                            "label": "学期",
+                                                            "type": "select",
+                                                            "name": "semester",
+                                                            required: 1,
+                                                            "options": [
+                                                                {
+                                                                    "label": "Spring",
+                                                                    "value": "Spring"
+                                                                },
+                                                                {
+                                                                    "label": "Summer",
+                                                                    "value": "Summer"
+                                                                },
+                                                                {
+                                                                    "label": "Fall",
+                                                                    "value": "Fall"
+                                                                },
+                                                                {
+                                                                    "label": "Winter",
+                                                                    "value": "Winter"
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "total_capacity",
+                                                            "label": "开课容量",
+                                                            required: 1,
+                                                            "validations": {
+                                                                "isNumeric": true
+                                                            }
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "current_capacity",
+                                                            "label": "当前容量",
+                                                            required: 1,
+                                                            "validations": {
+                                                                "isNumeric": true
+                                                            },
+                                                            disabled: true
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "year",
+                                                            "label": "学年",
+                                                            required: 1,
+                                                            "validations": {
+                                                                "isNumeric": true
+                                                            }
+                                                        },
+                                                        {
+                                                            "label": "教室",
+                                                            "type": "select",
+                                                            "name": "classroom_id",
+                                                            "source": "${classroom_options}",
+                                                            required: 1
+                                                        },
+                                                        {
+                                                            "label": "课程",
+                                                            "type": "select",
+                                                            "name": "course_id",
+                                                            "source": "${course_options}",
+                                                            required: 1
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+
+
+                ]
+            });
+        })();
+    </script>
+{% endblock content %}

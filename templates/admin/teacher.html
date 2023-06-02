@@ -1,0 +1,324 @@
+{% extends 'admin/base_admin.html' %}
+{% block content %}
+    <script type="text/javascript">
+        (function () {
+
+            // 添加按钮
+            addjson = {
+                "label": "新增教师",
+                "type": "button",
+                "actionType": "dialog",
+                "dialog": {
+                    "title": "新增教师",
+                    "size": 'lg',
+                    "body": {
+                        "type": "form",
+                        "api": "post:/admin/add_a_teacher",
+                        "reload": "window",
+                        "controls": [
+                            {
+                                "type": "text",
+                                "name": "teacher_id",
+                                label: "教师号",
+                                required: 1
+                            },
+                            {
+                                "type": "text",
+                                "name": "account",
+                                "label": "账号",
+                                required: 1,
+                                validations: {
+                                    isAlphanumeric: 1,
+                                    minLength: 5,
+                                    maxLength: 20,
+                                },
+                            },
+                            {
+                                "type": "text",
+                                "name": "password",
+                                "label": "密码",
+                                required: 1,
+                                validations: {
+                                    minLength: 1,
+                                },
+                            },
+                            {
+                                "type": "text",
+                                "name": "name",
+                                "label": "姓名",
+                                required: 1,
+
+                            },
+                            {
+                                "type": "text",
+                                "name": "id_card",
+                                "label": "身份证",
+                                required: 1,
+                                validations: {
+                                    isLength: 18,
+                                },
+                            },
+                            {
+                                "label": "学院",
+                                "type": "select",
+                                "name": "department_id",
+                                "source": "${department_options}",
+                                required: 1
+                            },
+                            {
+                                "type": "date",
+                                "name": "in_time",
+                                "label": "入职时间",
+                                required: 1
+                            },
+                            {
+                                "type": "text",
+                                "name": "tel",
+                                "label": "电话",
+                                "validations": {
+                                    "isNumeric": true
+                                }
+                            },
+                            {
+                                "type": "text",
+                                "name": "sign",
+                                "label": "简介",
+                            },
+                            {
+                                "label": "性别",
+                                "type": "select",
+                                "name": "sex",
+                                "options": [
+                                    {
+                                        "label": "Male",
+                                        "value": "Male"
+                                    },
+                                    {
+                                        "label": "Female",
+                                        "value": "Female"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+            // 顶部搜索
+            topsertch = {
+                "title": "搜索",
+                "controls": [
+                    {
+                        "type": "text",
+                        "name": "name",
+                        "placeholder": "名字"
+                    },
+                    {
+                        "type": "text",
+                        "name": "id_card",
+                        "placeholder": "身份证"
+                    }
+                ]
+            }
+
+
+            var amis = amisRequire("amis/embed");
+            // 用 amis 的 sdk 渲染内容区
+            amis.embed("#main", {
+                type: "page",
+                // subTitle: "展示一些常规的表单，包括验证、提示等等",
+                body: [
+                    {
+                        "type": "page",
+                        "body": {
+                            "type": "crud",
+                            syncLocation: false,
+                            "api": "/admin/get_all_teacher",
+                            "name": "userList",
+                            "filterTogglable": true,
+                            "headerToolbar": [
+                                addjson,
+                                "filter-toggler",
+                            ],
+                            "footerToolbar": [
+                                "statistics",
+                                "switch-per-page",
+                                "pagination"
+                            ],
+                            "filter": topsertch,
+                            "columns": [
+                                {
+                                    "name": "teacher_id",
+                                    "label": "教师号"
+                                },
+                                {
+                                    "name": "account",
+                                    "label": "账号"
+                                },
+                                {
+                                    "name": "password",
+                                    "label": "密码",
+                                },
+                                {
+                                    "name": "name",
+                                    "label": "姓名"
+                                },
+                                {
+                                    "name": "sex",
+                                    "label": "性别"
+                                },
+                                {
+                                    "name": "tel",
+                                    "label": "电话"
+                                },
+                                {
+                                    "name": "sign",
+                                    "label": "简介"
+                                },
+                                {
+                                    "name": "department.name",
+                                    label: "学院"
+                                },
+                                {
+                                    "name": "in_time",
+                                    type: "date",
+                                    label: "入职时间"
+                                },
+                                {
+                                    "name": "id_card",
+                                    label: "身份证"
+                                },
+                                {
+                                    "type": "operation",
+                                    "label": "操作",
+                                    "buttons": [
+                                        {
+                                            "tooltip": "删除",
+                                            "type": "button",
+                                            "icon": "fa fa-times text-danger",
+                                            "actionType": "ajax",
+                                            "confirmText": "确认要删除？",
+                                            "api": "delete:/admin/delete_a_teacher/${teacher_id}"
+                                        },
+                                        {
+                                            "tooltip": "修改",
+                                            "icon": "fa fa-pencil text-info",
+                                            "type": "button",
+                                            "actionType": "dialog",
+                                            "dialog": {
+                                                "title": "修改教师",
+                                                "size": 'lg',
+                                                "body": {
+                                                    "type": "form",
+                                                    "data": {},
+                                                    "api": "/admin/change_a_teacher",
+                                                    "reload": "window",
+                                                    "controls": [
+                                                        {
+                                                            "type": "text",
+                                                            "name": "teacher_id",
+                                                            label: "教师号",
+                                                            required: 1,
+                                                            disabled: true
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "account",
+                                                            "label": "账号",
+                                                            required: 1,
+                                                            validations: {
+                                                                isAlphanumeric: 1,
+                                                                minLength: 5,
+                                                                maxLength: 20,
+                                                            },
+                                                            disabled: true
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "password",
+                                                            "label": "密码",
+                                                            required: 1,
+                                                            validations: {
+                                                                minLength: 1,
+                                                            },
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "name",
+                                                            "label": "姓名",
+                                                            required: 1,
+
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "id_card",
+                                                            "label": "身份证",
+                                                            required: 1,
+                                                            validations: {
+                                                                isLength: 18,
+                                                            },
+                                                        },
+                                                        {
+                                                            "label": "学院",
+                                                            "type": "select",
+                                                            "name": "department_id",
+                                                            "source": "${department_options}",
+                                                            required: 1
+                                                        },
+                                                        {
+                                                            "type": "date",
+                                                            "name": "in_time",
+                                                            "label": "入职时间",
+                                                            required: 1
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "tel",
+                                                            "label": "电话",
+                                                            "validations": {
+                                                                "isNumeric": true
+                                                            }
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "sign",
+                                                            "label": "简介",
+                                                        },
+                                                        {
+                                                            "label": "性别",
+                                                            "type": "select",
+                                                            "name": "sex",
+                                                            "options": [
+                                                                {
+                                                                    "label": "Male",
+                                                                    "value": "Male"
+                                                                },
+                                                                {
+                                                                    "label": "Female",
+                                                                    "value": "Female"
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "tooltip": "重置密码",
+                                            "type": "button",
+                                            "icon": "fa fa-key text-warning",
+                                            "actionType": "ajax",
+                                            "confirmText": "确认要重置密码为：123456",
+                                            "api": "put:/admin/repwd_a_teacher/${teacher_id}"
+                                        },
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+
+
+                ]
+            });
+        })();
+    </script>
+{% endblock content %}

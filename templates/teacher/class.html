@@ -1,0 +1,318 @@
+{% extends 'teacher/base_teacher.html' %}
+{% block content %}
+    <script type="text/javascript">
+        (function () {
+
+            // 添加按钮
+            addjson = {
+                "label": "新增学生",
+                "type": "button",
+                "actionType": "dialog",
+                "dialog": {
+                    "title": "新增学生",
+                    "size": 'lg',
+                    "body": {
+                        "type": "form",
+                        "api": "post:/admin/add_a_student",
+                        "reload": "window",
+                        "controls": [
+                            {
+                                "type": "text",
+                                "name": "student_id",
+                                label: "学号",
+                                required: 1
+                            },
+                            {
+                                "type": "text",
+                                "name": "account",
+                                "label": "账号",
+                                required: 1,
+                                validations: {
+                                    isAlphanumeric: 1,
+                                    minLength: 5,
+                                    maxLength: 20,
+                                },
+                            },
+                            {
+                                "type": "text",
+                                "name": "password",
+                                "label": "密码",
+                                required: 1,
+                                validations: {
+                                    minLength: 1,
+                                },
+                            },
+                            {
+                                "type": "text",
+                                "name": "name",
+                                "label": "姓名",
+                                required: 1,
+
+                            },
+                            {
+                                "type": "text",
+                                "name": "id_card",
+                                "label": "身份证",
+                                required: 1,
+                                validations: {
+                                    isLength: 18,
+                                },
+                            },
+                            {
+                                "label": "班级",
+                                "type": "select",
+                                "name": "class_id",
+                                "source": "${class_options}",
+                                required: 1
+                            },
+                            {
+                                "type": "text",
+                                "name": "grade",
+                                "label": "年级",
+                                "validations": {
+                                    "isNumeric": true
+                                }
+                            },
+                            {
+                                "type": "date",
+                                "name": "in_time",
+                                "label": "入学时间"
+                            },
+                            {
+                                "type": "text",
+                                "name": "tel",
+                                "label": "电话",
+                                "validations": {
+                                    "isNumeric": true
+                                }
+                            },
+                            {
+                                "type": "text",
+                                "name": "detail",
+                                "label": "简介",
+                            },
+                            {
+                                "label": "性别",
+                                "type": "select",
+                                "name": "sex",
+                                "options": [
+                                    {
+                                        "label": "Male",
+                                        "value": "Male"
+                                    },
+                                    {
+                                        "label": "Female",
+                                        "value": "Female"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+            // 顶部搜索
+            topsertch = {
+                "title": "搜索",
+                "controls": [
+                    {
+                        "type": "text",
+                        "name": "c_id",
+                        "placeholder": "班级号"
+                    },
+                    {
+                        "type": "text",
+                        "name": "s_id",
+                        "placeholder": "学生学号"
+                    }
+                ]
+            }
+
+            var amis = amisRequire("amis/embed");
+            // 用 amis 的 sdk 渲染内容区
+            amis.embed("#main", {
+                type: "page",
+                title: "用户列表",
+                // subTitle: "展示一些常规的表单，包括验证、提示等等",
+                body: [
+                    {
+                        "type": "page",
+                        "body": {
+                            "type": "crud",
+                            syncLocation: false,
+                            "api": "/teacher/get_all_students",
+                            "name": "userList",
+                            "filterTogglable": true,
+                            "headerToolbar": [
+                                addjson,
+                                "filter-toggler",
+                            ],
+                            "footerToolbar": [
+                                "statistics",
+                                "switch-per-page",
+                                "pagination"
+                            ],
+                            "filter": topsertch,
+                            "columns": [
+                                {
+                                    "name": "class_id",
+                                    label: "班级编号"
+                                },
+
+                                {
+                                    "name": "class_name",
+                                    label: "班级名称"
+                                },
+                                {
+                                    "name": "student_id",
+                                    "label": "学号"
+                                },
+                                {
+                                    "name": "name",
+                                    "label": "姓名"
+                                },
+                                {
+                                    "name": "account",
+                                    "label": "账户"
+                                },
+                                {
+                                    "name": "password",
+                                    "label": "密码"
+                                },
+                                {
+                                    "name": "sex",
+                                    "label": "性别"
+                                },
+                                {
+                                    "name": "tel",
+                                    "label": "电话"
+                                },
+                                {
+                                    "name": "detail",
+                                    "label": "简介"
+                                },
+                                {
+                                    "name": "in_time",
+                                    type: "date",
+                                    label: "入学时间"
+                                },
+                                {
+                                    "name": "id_card",
+                                    label: "身份证"
+                                },
+                                {
+                                    "name": "in_time",
+                                    label: "入学时间"
+                                 },
+                                {
+                                    "type": "operation",
+                                    "label":"操作",
+                                    "buttons": [
+                                        {
+                                            "tooltip": "修改",
+                                             //"label": "操作",
+                                            "icon": "fa fa-pencil text-info",
+                                            "type": "button",
+                                            "actionType": "dialog",
+                                            "dialog": {
+                                                "title": "修改教师",
+                                                "size": 'lg',
+                                                "body": {
+                                                    "type": "form",
+                                                    "data": {},
+                                                    "api": "/teacher/update_student_info",
+                                                    "reload": "window",
+                                                    "controls": [
+                                                        {
+                                                            "type": "text",
+                                                            "name": "student_id",
+                                                            label: "学号",
+                                                            required: 1,
+                                                            disabled: true
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "account",
+                                                            "label": "账号",
+                                                            required: 1,
+                                                            validations: {
+                                                                isAlphanumeric: 1,
+                                                                minLength: 5,
+                                                                maxLength: 20,
+                                                            },
+                                                            disabled: true
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "password",
+                                                            "label": "密码",
+                                                            required: 1,
+                                                            validations: {
+                                                                minLength: 1,
+                                                            },
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "name",
+                                                            "label": "姓名",
+                                                            required: 1,
+                                                             disabled: true
+
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "id_card",
+                                                            "label": "身份证",
+                                                            required: 1,
+                                                            validations: {
+                                                                isLength: 18,
+                                                            },
+                                                             disabled: true
+                                                        },
+                                                        {
+                                                            "label": "班级",
+                                                            "type": "text",
+                                                            "name": "class_id",
+                                                            required: 1,
+                                                            disabled:true
+                                                        },
+                                                        {
+                                                            "type": "date",
+                                                            "name": "in_time",
+                                                            "label": "入学时间",
+                                                            required: 1,
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "tel",
+                                                            "label": "电话",
+                                                            "validations": {
+                                                                "isNumeric": true
+                                                            }
+                                                        },
+                                                        {
+                                                            "type": "text",
+                                                            "name": "detail",
+                                                            "label": "简介",
+                                                        },
+                                                        {
+                                                            "label": "性别",
+                                                            "type": "text",
+                                                            "name": "sex",
+                                                             disabled:true
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+
+
+                ]
+            });
+        })();
+    </script>
+{% endblock content %}

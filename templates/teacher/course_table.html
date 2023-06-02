@@ -1,0 +1,209 @@
+{% extends 'teacher/base_teacher.html' %}
+{% block content %}
+    <script type="text/javascript">
+        (function () {
+
+            // 添加按钮
+            addjson = {
+                "label": "新增学生",
+                "type": "button",
+                "actionType": "dialog",
+                "dialog": {
+                    "title": "新增学生",
+                    "size": 'lg',
+                    "body": {
+                        "type": "form",
+                        "api": "post:/admin/add_a_student",
+                        "reload": "window",
+                        "controls": [
+                            {
+                                "type": "text",
+                                "name": "student_id",
+                                label: "学号",
+                                required: 1
+                            },
+                            {
+                                "type": "text",
+                                "name": "account",
+                                "label": "账号",
+                                required: 1,
+                                validations: {
+                                    isAlphanumeric: 1,
+                                    minLength: 5,
+                                    maxLength: 20,
+                                },
+                            },
+                            {
+                                "type": "text",
+                                "name": "password",
+                                "label": "密码",
+                                required: 1,
+                                validations: {
+                                    minLength: 1,
+                                },
+                            },
+                            {
+                                "type": "text",
+                                "name": "name",
+                                "label": "姓名",
+                                required: 1,
+
+                            },
+                            {
+                                "type": "text",
+                                "name": "id_card",
+                                "label": "身份证",
+                                required: 1,
+                                validations: {
+                                    isLength: 18,
+                                },
+                            },
+                            {
+                                "label": "班级",
+                                "type": "select",
+                                "name": "class_id",
+                                "source": "${class_options}",
+                                required: 1
+                            },
+                            {
+                                "type": "text",
+                                "name": "grade",
+                                "label": "年级",
+                                "validations": {
+                                    "isNumeric": true
+                                }
+                            },
+                            {
+                                "type": "date",
+                                "name": "in_time",
+                                "label": "入学时间"
+                            },
+                            {
+                                "type": "text",
+                                "name": "tel",
+                                "label": "电话",
+                                "validations": {
+                                    "isNumeric": true
+                                }
+                            },
+                            {
+                                "type": "text",
+                                "name": "detail",
+                                "label": "简介",
+                            },
+                            {
+                                "label": "性别",
+                                "type": "select",
+                                "name": "sex",
+                                "options": [
+                                    {
+                                        "label": "Male",
+                                        "value": "Male"
+                                    },
+                                    {
+                                        "label": "Female",
+                                        "value": "Female"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+            // 顶部搜索
+            topsertch = {
+                "title": "搜索",
+                "controls": [
+                    {
+                        "type": "text",
+                        "name": "sec_id",
+                        "placeholder": "开课号"
+                    },
+                ]
+            }
+
+            var amis = amisRequire("amis/embed");
+            // 用 amis 的 sdk 渲染内容区
+            amis.embed("#main", {
+                type: "page",
+                title: "用户列表",
+                // subTitle: "展示一些常规的表单，包括验证、提示等等",
+                body: [
+                    {
+                        "type": "page",
+                        "body": {
+                            "type": "crud",
+                            syncLocation: false,
+                            "api": "/teacher/get_course_table",
+                            "name": "userList",
+                            "filterTogglable": true,
+                            "headerToolbar": [
+                                addjson,
+                                "filter-toggler",
+                            ],
+                            "footerToolbar": [
+                                "statistics",
+                                "switch-per-page",
+                                "pagination"
+                            ],
+                            "filter": topsertch,
+                            "columns": [
+                                {
+                                    "name": "sec_id",
+                                    label: "开课号"
+                                },
+                                {
+                                    "name": "course_name",
+                                    "label": "课程名"
+                                },
+                                {
+                                    "name": "current_capacity",
+                                    "label": "课程容量"
+                                },
+                                {
+                                    "name": "classroom_name",
+                                    "label": "教师"
+                                },
+                                {
+                                    "name": "building_name",
+                                    "label": "教学楼"
+                                },
+                                {
+                                    "name": "year",
+                                    "label": "年份"
+
+                                },
+                                 {
+                                    "name": "day_of_week",
+                                    "label": "日期"
+
+                                },
+                                 {
+                                    "name": "start_week",
+                                    "label": "开始周"
+
+                                },
+                                 {
+                                    "name": "end_week",
+                                    "label": "结束周"
+
+                                },
+                                 {
+                                    "name": "start_time",
+                                    "label": "开始时间"
+
+                                },
+                                 {
+                                    "name": "end_time",
+                                    "label": "结束时间"
+
+                                }
+
+                            ]
+                        }
+                    }
+                ]
+            });
+        })();
+    </script>
+{% endblock content %}
